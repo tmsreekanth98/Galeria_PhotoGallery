@@ -1,0 +1,50 @@
+{% extends 'photogallery/base.html' %}
+
+{% block content %}
+<body class="body_login">
+<div class="jumbotron">
+	<div class="header">
+		<div class="logo">
+			<h1 class="title" style="display: inline">Galeria</h1>
+		</div>
+
+		<div class="topbar">
+			<h2 class="menu-item">Home</h2>
+			
+			<a href="https://github.com/tmsreekanth98"><h2 class="menu-item">Github</h2></a>
+		</div>
+			<a href="{% url 'register' %}"><h3 class="login-signup-button menu-item">Register</h3></a>
+			
+			<a href="{% url 'login' %}"><h3 class="login-signup-button menu-item menu-item-current">Login</h3></a>		
+	</div>
+</div>
+
+<div class="login-box">
+	<h1 class="login-box-title">Login</h1>
+	<hr class="white-hr">
+		<br>
+		
+
+  		<form method="post">
+  			{% csrf_token %}
+  			{% for field in form %}
+  				{% if field.errors %}
+  					<input name="{{field.name}}" type="{{field.label}}" placeholder="{{field.label}}" class="form-input form-control-sm invalid-form"><br><br><br>
+  					
+  				{% else %}
+  					<input name="{{field.name}}" type="{{field.label}}" placeholder="{{field.label}}" class="form-input form-control-sm"><br><br><br>
+  				{% endif %}
+  			{% endfor %}
+  			<div align="center">
+  				<button class="login-form-button" type="submit"><img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-9/128/Login-icon.png" class="login-button-icon"><div style="color: white;display: inline;padding: 5px;font-family:Helvetica">Login</div></button>
+  			</div>
+		</form>	
+
+</div>
+
+
+
+
+</body>
+{% endblock %}
+

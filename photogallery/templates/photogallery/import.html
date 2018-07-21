@@ -1,0 +1,56 @@
+{% extends 'photogallery/base.html' %}
+
+{% block content %}
+{% load static %}
+
+
+<body class="body_profile">
+
+	<div class="jumbotron">
+		<div class="header">
+			<div class="logo">
+				<h1 class="title" style="display: inline">Galeria</h1>
+			</div>
+
+			<div class="topbar">
+				<a href="{% url 'profile' %}"><h2 class="menu-item">My Pics</h2></a>
+				<h2 class="menu-item menu-item-current">Import</h2>
+				<a href="{% url 'archive' %}"><h2 class="menu-item">Archive</h2></a>
+			</div>
+				
+				
+				<a href="{% url 'logout' %}"><h3 class="login-signup-button menu-item">Logout</h3></a>	
+				<h3 class="user-status">Hello {{request.user.username}} </h3>	
+		</div>
+	</div>
+	
+	<div class="import-box">
+		<h2 class="login-box-title">Import Photo</h2>
+		<hr class="white-hr">
+		<div align="center">
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				
+				{% for field in import_form %}
+					 <div class="form-group"> 
+					 	{{field}}
+					 	{% ifequal field.name 'public' %}
+					 	Public
+					 	{% endifequal %}
+
+					 	{% ifequal field.name 'favorite' %}
+					 	Favorite
+					 	{% endifequal %}
+					 </div>
+
+				{% endfor %}
+
+				<input type="submit" name="submit" value="Import" class="btn btn-secondary import-form-title">
+			</form>
+		</div>
+	</div>
+
+</body>
+
+
+{% endblock %}

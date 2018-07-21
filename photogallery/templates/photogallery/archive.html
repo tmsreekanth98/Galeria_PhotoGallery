@@ -1,0 +1,67 @@
+{% extends 'photogallery/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<body class="body_profile">
+
+
+	<div class="jumbotron">
+		<div class="header">
+			<div class="logo">
+				<h1 class="title" style="display: inline">Galeria</h1>
+			</div>
+
+			<div class="topbar">
+				<a href="{% url 'profile' %}"><h2 class="menu-item">My Pics</h2></a>
+				<a href="{% url 'import' %}"><h2 class="menu-item">Import</h2></a>
+				<h2 class="menu-item menu-item-current">Archive</h2>
+			</div>
+				
+				
+				<a href="{% url 'logout' %}"><h3 class="login-signup-button menu-item">Logout</h3></a>	
+				<h3 class="user-status">Hello {{request.user.username}} </h3>	
+		</div>
+	</div>
+
+
+
+	<div class="home-title-box">
+		<h1 class="home-archive-title">Public Image Archive</h1>
+	</div>
+
+	<div class="row row-margin">
+		{% for photo in public_photos %}
+		<div class="col-lg-3">
+			<div class="photo-box">
+				<img class="photo-box-image" src="{{photo.url}}" onClick="window.location='{% url 'view_photo' photo.id %}'">
+				
+				<div class="row">
+					<div class="col-lg-9">
+						<h4 class="photo-title">{{photo.title | truncatechars:35}} ({{photo.file_format}})</h4>
+						<h5 class="photo-title">{{photo.date_added|date:'Y-m-d'}}</h5>
+					</div>
+					<div class="col-lg-3">
+						<img class="archive-add" id="notfav{{photo.id}}" onClick="window.location='{% url 'add_photo' photo.id %}';" src="{% static 'photogallery/images/add.png' %}">
+					</div>
+
+					
+					
+				</div>
+
+				<div class="photo-box-bottom-part">
+							<h6 class="photo-title">BY: {{photo.username}}</h6>
+				</div>
+				
+				
+			</div>
+		</div>
+		{% endfor %}
+		
+	</div>
+
+
+</body>
+
+{% endblock %}

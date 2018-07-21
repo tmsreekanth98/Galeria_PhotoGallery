@@ -1,0 +1,96 @@
+{% extends 'photogallery/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<body class="body_profile">
+	
+	<div class="jumbotron">
+		<div class="header">
+			<div class="logo">
+				<h1 class="title" style="display: inline">Galeria</h1>
+			</div>
+
+			
+
+			{% ifnotequal photo.original_uploader request.user.username %}
+					{% if photo.is_public is True %}
+						<div class="topbar">
+							<a href="{% url 'profile' %}"><h2 class="menu-item">My Pics</h2></a>
+							<a href="{% url 'import' %}"><h2 class="menu-item">Import</h2></a>
+							<a href="{% url 'archive' %}"><h2 class="menu-item menu-item-current">Archive</h2></a>
+						</div>
+					{% else %}
+						<div class="topbar">
+							<a href="{% url 'profile' %}"><h2 class="menu-item menu-item-current">My Pics</h2></a>
+							<a href="{% url 'import' %}"><h2 class="menu-item">Import</h2></a>
+							<a href="{% url 'archive' %}"><h2 class="menu-item">Archive</h2></a>
+						</div>
+					{% endif %}
+			{% else %}
+
+				<div class="topbar">
+					<a href="{% url 'profile' %}"><h2 class="menu-item menu-item-current">My Pics</h2></a>
+					<a href="{% url 'import' %}"><h2 class="menu-item">Import</h2></a>
+					<a href="{% url 'archive' %}"><h2 class="menu-item">Archive</h2></a>
+				</div>
+
+			{% endifnotequal %}
+				
+				<a href="{% url 'logout' %}"><h3 class="login-signup-button menu-item">Logout</h3></a>	
+				<h3 class="user-status">Hello {{request.user.username}} </h3>	
+		</div>
+	</div>
+
+
+	<div class="photo-view-box">
+	{% if error %}
+		<h1 class="view-title">{{error}}</h1>
+		{% ifequal errorcode '404' %}
+			<img class="view-photo" src="{% static 'photogallery/images/404.jpg' %}">
+		{% else %}
+			<img class="view-photo" src="{% static 'photogallery/images/403.png' %}">
+		{% endifequal %}
+	{% else %}
+		<h1 class="view-title">{{photo.title}}.{{photo.file_format}}</h1>
+		<img class="view-photo" src="{{ photo.url }}">
+		<br>
+		<div class="row">
+			<div class="col-lg-6">
+				<h5 style="color: white;"> Uploaded By: {{photo.original_uploader}} </h5>
+				<h5 style="color: white;"> Uploaded On: {{photo.date_added|date:'Y-m-d'}} </h5>
+			</div>
+
+			<div class="col-lg-6">
+				
+				
+				
+
+				{% ifnotequal photo.original_uploader request.user.username %}
+					{% if photo.is_public is True %}
+						<img style="vertical-align: middle;display: inline;" src="{% static 'photogallery/images/add.png' %}" class="view-box-add-button" onClick="window.location='{% url 'add_photo' photo.id %}'">
+					{% endif %}
+					
+				{% else %}
+					<img onClick="window.location='{% url 'delete_photo' photo.id %}'" style="vertical-align: middle;display: inline;" src="{% static 'photogallery/images/delete.png' %}" class="view-box-add-button">
+
+					{% if photo.is_favorite %}
+					<img onClick="window.location='{% url 'view_favorite_photo' photo.id %}'" style="vertical-align: middle;display: inline;" src="{% static 'photogallery/images/staryellow.png' %}" class="view-box-add-button">
+					{% else %}
+						<img onClick="window.location='{% url 'view_favorite_photo' photo.id %}'" style="vertical-align: middle;display: inline;" src="{% static 'photogallery/images/starblue.png' %}" class="view-box-add-button">
+					{% endif %}
+
+				{% endifnotequal %}
+
+				<img onClick="window.location='{{photo.url}}'" style="vertical-align: middle;display: inline;" src="{% static 'photogallery/images/download.png' %}" class="view-box-add-button">
+			</div>
+
+
+		</div>
+	{% endif %}
+	</div>
+
+</body>
+
+{% endblock %}

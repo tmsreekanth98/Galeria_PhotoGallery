@@ -1,0 +1,94 @@
+{% extends 'photogallery/base.html' %}
+
+{% block content %}
+{% load static %}
+<body class="body_profile">
+<div class="jumbotron">
+	<div class="header">
+		<div class="logo">
+			<h1 class="title" style="display: inline">Galeria</h1>
+		</div>
+
+		<div class="topbar">
+			<h2 class="menu-item menu-item-current">My Pics</h2>
+			<a href="{% url 'import' %}"><h2 class="menu-item">Import</h2></a>
+			<a href="{% url 'archive' %}"><h2 class="menu-item">Archive</h2></a>
+		</div>
+			
+			
+			<a href="{% url 'logout' %}"><h3 class="login-signup-button menu-item">Logout</h3></a>	
+			<h3 class="user-status">Hello {{request.user.username}} </h3>	
+	</div>
+</div>
+
+<script type="text/javascript">
+	function changeImage(id){
+		var a = document.getElementById("fav"+id);
+		var b = document.getElementById("notfav"+id);
+		var c = document.getElementById("fav_div"+id);
+		var d = document.getElementById("not_fav_div"+id);
+
+		if(a==null){
+			b.src = "{% static 'photogallery/images/staryellow.png' %}"
+			d.style = "background-color:#3F7391";
+			console.log("b");
+		}
+		if(b==null){
+			a.src = "{% static 'photogallery/images/starblue.png' %}";
+			c.style = "background-color:lightblue"
+			console.log("a");
+
+		}
+	}
+</script>
+
+<!--  -->
+
+<div class="row row-margin">
+	{% for photo in photos %}
+	<div class="col-lg-3">
+		
+		<div class="photo-box">
+			<a href="{% url 'view_photo' photo.id %}"><img class="photo-box-image" src="{{photo.url}}"></a>
+			
+			<div class="row">
+				<div class="col-lg-9">
+					<h4 class="photo-title">{{photo.title | truncatechars:35}} ({{photo.file_format}})</h4>
+					<h5 class="photo-title">{{photo.date_added|date:'Y-m-d'}}</h5>
+				</div>
+
+				<div class="col-lg-3" align="center">
+					{% if photo.is_favorite %}
+						<div id="fav_div{{photo.id}}" class="photo-favorite-done">
+							<img class="control-buttons" id="fav{{photo.id}}" onClick="changeImage({{photo.id}});window.location='{% url 'favorite_photo' photo.id %}';" src="{% static 'photogallery/images/staryellow.png' %}">
+						</div>
+					{% else %}
+						<div id="not_fav_div{{photo.id}}" class="photo-favorite">
+							<img class="control-buttons" id="notfav{{photo.id}}" onClick="changeImage({{photo.id}});window.location='{% url 'favorite_photo' photo.id %}';" src="{% static 'photogallery/images/starblue.png' %}"> 
+						</div>
+					{% endif %}
+						<div class="photo-delete">
+							<img class="control-buttons" onClick="window.location='{% url 'delete_photo' photo.id %}'" src="{% static 'photogallery/images/delete2.png' %}" width="70%"> 
+						</div>
+				</div>
+				
+			</div>
+
+			<div class="photo-box-bottom-part">
+						<h6 class="photo-title">{% if photo.is_public %}Public{% else %}Private{% endif %}</h6>
+			</div>
+			
+			
+		</div>
+	</div>
+	{% endfor %}
+	
+</div>
+
+
+
+
+
+
+{% endblock %}
+</body>
